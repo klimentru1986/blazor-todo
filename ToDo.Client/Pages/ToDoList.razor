@@ -1,0 +1,41 @@
+@page "/todo-list"
+@inject HttpClient Http;
+@using ToDo.Contracts;
+
+<h1>ToDo List</h1>
+
+@if (toDos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ToDo</th>
+                <th>completed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var toDo in toDos)
+            {
+                <tr>
+                    <td>@toDo.Title</td>
+                    <td>@toDo.Completed</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    ToDoContract[] toDos;
+
+    private readonly string baseUrl = "https://localhost:5001/api/";
+
+    protected override async Task OnInitAsync()
+    {
+        toDos = await Http.GetJsonAsync<ToDoContract[]>(baseUrl + "todo");
+    }
+}

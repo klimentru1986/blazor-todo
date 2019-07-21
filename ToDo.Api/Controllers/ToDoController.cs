@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 using ToDo.Contracts;
 
 namespace ToDo.Api
 {
+    [DisableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class ToDoController : ControllerBase
