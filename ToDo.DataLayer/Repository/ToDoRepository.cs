@@ -13,26 +13,23 @@ namespace ToDo.DataLayer.Repository
     }
     public class ToDoRepository : IToDoRepository
     {
-        private DataContext _context { get; set; }
+        private DataContext _context { get; }
+        private DbSet<ToDoEntity> _dbSet { get; set; }
 
         public ToDoRepository(DataContext dbContext)
         {
             _context = dbContext;
-        }
-
-        private DbSet<ToDoEntity> _getDbSet()
-        {
-            return _context.ToDoEntity;
+            _dbSet = _context.ToDoEntity;
         }
 
         public async Task<IList<ToDoEntity>> GetAll()
         {
-            return await _getDbSet().ToArrayAsync();
+            return await _dbSet.ToArrayAsync();
         }
 
         public async Task<ToDoEntity> AddOne(ToDoEntity ToDo)
         {
-            var res = await _getDbSet().AddAsync(ToDo);
+            var res = await _dbSet.AddAsync(ToDo);
 
             _context.SaveChanges();
 

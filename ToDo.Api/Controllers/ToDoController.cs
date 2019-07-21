@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-
+using ToDo.Api.Services;
 using ToDo.Contracts;
 using ToDo.DataLayer.Repository;
 
@@ -15,29 +15,37 @@ namespace ToDo.Api
     public class ToDoController : ControllerBase
     {
 
-        private IToDoRepository _repository { get; set; }
+        private IToDoService _service { get; set; }
 
-        public ToDoController(IToDoRepository repository)
+        public ToDoController(IToDoService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
         // GET api/todo
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult<IList<ToDoContract>>> Get()
         {
 
-            var response = await _repository.GetAll();
+            var response = await _service.GetAll();
 
-            return Ok(response);
+            return Ok(response
+                .Select(i => new ToDoContract
+                {
+                    Id = i.Id,
+                    Title = i.Title,
+                    Description = i.Description,
+                    Completed = i.Completed
+                })
+                .ToList());
         }
 
         // Post api/todo
         [HttpPost]
-        public async Task<ActionResult> AddOne([FromBody] ToDoContract todo)
+        public async Task<ActionResult<ToDoContract>> AddOne([FromBody] ToDoContract todo)
         {
 
-            var response = await _repository.AddOne(
+            var response = await _service.AddOne(
                 new DataLayer.Models.ToDoEntity
                 {
                     Id = todo.Id,

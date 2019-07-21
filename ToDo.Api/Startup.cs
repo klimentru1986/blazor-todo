@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-
+using ToDo.Api.Services;
 using ToDo.DataLayer;
 using ToDo.DataLayer.Repository;
 
@@ -31,14 +31,16 @@ namespace ToDo.Api
         {
             services.AddControllers();
 
+            services.AddTransient<IToDoRepository, ToDoRepository>();
+
+            services.AddTransient<IToDoService, ToDoService>();
+
             services
                 .AddEntityFrameworkInMemoryDatabase()
                 .AddDbContext<DataContext>((sp, options) =>
                 {
                     options.UseInMemoryDatabase("todo").UseInternalServiceProvider(sp);
                 });
-
-            services.AddTransient<IToDoRepository, ToDoRepository>();
 
             services.AddCors(options =>
                 {
