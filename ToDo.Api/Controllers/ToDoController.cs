@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Api.Services;
 using ToDo.Contracts;
+using ToDo.DataLayer.Models;
 using ToDo.DataLayer.Repository;
 
 namespace ToDo.Api
@@ -30,39 +31,59 @@ namespace ToDo.Api
             var response = await _service.GetAll();
 
             return Ok(response
-                .Select(i => new ToDoContract
-                {
-                    Id = i.Id,
-                    Title = i.Title,
-                    Description = i.Description,
-                    Completed = i.Completed
-                })
+                .Select(i => MapEntityToContract(i))
                 .ToList());
         }
 
         // Post api/todo
         [HttpPost]
-        public async Task<ActionResult<ToDoContract>> AddOne([FromBody] ToDoContract todo)
+        public async Task<ActionResult<ToDoContract>> AddOne([FromBody] ToDoContract ToDo)
         {
 
-            var response = await _service.AddOne(
-                new DataLayer.Models.ToDoEntity
-                {
-                    Id = todo.Id,
-                    Title = todo.Title,
-                    Description = todo.Description,
-                    Completed = todo.Completed
-                }
-            );
+            var response = await _service.AddOne(MapContractToEntity(ToDo));
 
-            return Ok(new ToDoContract
+            return Ok(MapEntityToContract(response));
+        }
+
+        // Put api/todo
+        [HttpPut]
+        public ActionResult<ToDoContract> UpdateOne([FromBody] ToDoContract ToDo)
+        {
+
+            var response = _service.UpdateOne(MapContractToEntity(ToDo));
+
+            return MapEntityToContract(response);
+        }
+
+        // Delete api/todo
+        [HttpDelete]
+        public ActionResult Delete([FromQuery] int Id)
+        {
+            _service.DeleteOne(new ToDoEntity { Id = Id });
+
+            return Ok();
+        }
+
+        private ToDoEntity MapContractToEntity(ToDoContract contract)
+        {
+            return new ToDoEntity
             {
-                Id = response.Id,
-                Title = response.Title,
-                Description = response.Description,
-                Completed = response.Completed
-            });
+                Id = contract.Id,
+                Title = contract.Title,
+                Description = contract.Description,
+                Completed = contract.Completed
+            };
+        }
+
+        private ToDoContract MapEntityToContract(ToDoEntity entity)
+        {
+            return new ToDoContract
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                Description = entity.Description,
+                Completed = entity.Completed
+            };
         }
     }
-
 }

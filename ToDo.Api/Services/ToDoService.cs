@@ -9,6 +9,8 @@ namespace ToDo.Api.Services
     {
         Task<IList<ToDoEntity>> GetAll();
         Task<ToDoEntity> AddOne(ToDoEntity ToDo);
+        ToDoEntity UpdateOne(ToDoEntity ToDo);
+        void DeleteOne(ToDoEntity ToDo);
     }
     public class ToDoService : IToDoService
     {
@@ -27,6 +29,16 @@ namespace ToDo.Api.Services
         public async Task<ToDoEntity> AddOne(ToDoEntity ToDo)
         {
             return await _repository.AddOne(ToDo);
+        }
+
+        public ToDoEntity UpdateOne(ToDoEntity ToDo)
+        {
+            return _repository.UpdateOne(ToDo);
+        }
+
+        public void DeleteOne(ToDoEntity ToDo)
+        {
+            _repository.DeleteOne(ToDo);
         }
     }
 }

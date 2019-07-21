@@ -10,6 +10,10 @@ namespace ToDo.DataLayer.Repository
         Task<IList<ToDoEntity>> GetAll();
 
         Task<ToDoEntity> AddOne(ToDoEntity ToDo);
+
+        ToDoEntity UpdateOne(ToDoEntity ToDo);
+
+        void DeleteOne(ToDoEntity ToDo);
     }
     public class ToDoRepository : IToDoRepository
     {
@@ -34,6 +38,21 @@ namespace ToDo.DataLayer.Repository
             _context.SaveChanges();
 
             return res.Entity;
+        }
+
+        public ToDoEntity UpdateOne(ToDoEntity ToDo)
+        {
+            var res = _dbSet.Update(ToDo);
+
+            _context.SaveChanges();
+
+            return ToDo;
+        }
+
+        public void DeleteOne(ToDoEntity ToDo)
+        {
+            _dbSet.Remove(ToDo);
+            _context.SaveChanges();
         }
     }
 }
