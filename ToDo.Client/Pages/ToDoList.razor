@@ -1,5 +1,6 @@
 @page "/todo-list"
 @inject HttpClient Http;
+@using ToDo.Client.ViewModel;
 @using ToDo.Contracts;
 
 <h1>ToDo List</h1>
@@ -32,7 +33,7 @@ else
 @code {
     ToDoContract[] toDos;
 
-    private readonly string baseUrl = "http://localhost:5001/api/";
+    public readonly string baseUrl = new BaseUrl().Url;
 
     protected override async Task OnInitAsync()
     {
