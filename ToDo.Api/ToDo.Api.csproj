@@ -8,4 +8,8 @@
     <ProjectReference Include="../ToDo.Contracts/ToDo.Contracts.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../ToDo.DataLayer/ToDo.DataLayer.csproj"/>
+  </ItemGroup>
+
 </Project>

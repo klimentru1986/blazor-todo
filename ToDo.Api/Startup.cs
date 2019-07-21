@@ -6,10 +6,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
+using ToDo.DataLayer;
+using ToDo.DataLayer.Repository;
 
 namespace ToDo.Api
 {
@@ -26,6 +30,15 @@ namespace ToDo.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services
+                .AddEntityFrameworkInMemoryDatabase()
+                .AddDbContext<DataContext>((sp, options) =>
+                {
+                    options.UseInMemoryDatabase("todo").UseInternalServiceProvider(sp);
+                });
+
+            services.AddTransient<IToDoRepository, ToDoRepository>();
 
             services.AddCors(options =>
                 {
