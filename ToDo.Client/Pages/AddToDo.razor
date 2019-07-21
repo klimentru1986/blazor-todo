@@ -1,16 +1,40 @@
 ﻿@page "/add-todo"
+@inject HttpClient Http;
+@inject IUriHelper UriHelper
+@using ToDo.Client.ViewModel;
+@using ToDo.Contracts;
 
 <h1>Add ToDo</h1>
 
-<!-- <p>Current count: @currentCount</p> -->
+<EditForm Model="@formModel" OnValidSubmit="@AddToDoItem">
+  <div class="form-group">
+    <label for="toDoTitle">ToDo Title</label>
+    <InputText @bind-Value="@formModel.Title"
+        class="form-control" 
+        id="toDoTitle" 
+        aria-describedby="ToDo Title" placeholder="Enter title" />
+  </div>
 
-<button class="btn btn-primary" @onclick="@IncrementCount">Click me</button>
+  <div class="form-group">
+    <label for="toDoDescription">ToDo Description</label>
+    <InputTextArea @bind-Value="@formModel.Description" 
+        class="form-control" 
+        id="toDoDescription" 
+        rows="3"></InputTextArea>
+  </div>
+
+    <button class="btn btn-primary">Add ToDo</button>
+</EditForm>
 
 @code {
-    int currentCount = 0;
+    public ToDoContract formModel = new ToDoContract();
 
-    void IncrementCount()
+    public readonly string baseUrl = new BaseUrl().Url;
+
+    async void AddToDoItem() 
     {
-        currentCount++;
+        formModel.Completed = false;
+        await Http.PostJsonAsync<ToDoContract>(baseUrl + "todo", formModel);
+        UriHelper.NavigateTo("todo-list");
     }
 }
