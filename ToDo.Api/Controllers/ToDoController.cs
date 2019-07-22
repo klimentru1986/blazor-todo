@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Api.Services;
-using ToDo.Contracts;
-using ToDo.DataLayer.Models;
-using ToDo.DataLayer.Repository;
+using ToDo.Models;
+using ToDo.DataLayer.Entities;
 
 namespace ToDo.Api
 {
@@ -25,7 +24,7 @@ namespace ToDo.Api
 
         // GET api/todo
         [HttpGet]
-        public async Task<ActionResult<IList<ToDoContract>>> Get()
+        public async Task<ActionResult<IList<ToDoModel>>> Get()
         {
 
             var response = await _service.GetAll();
@@ -37,7 +36,7 @@ namespace ToDo.Api
 
         // Post api/todo
         [HttpPost]
-        public async Task<ActionResult<ToDoContract>> AddOne([FromBody] ToDoContract ToDo)
+        public async Task<ActionResult<ToDoModel>> AddOne([FromBody] ToDoModel ToDo)
         {
 
             var response = await _service.AddOne(MapContractToEntity(ToDo));
@@ -47,7 +46,7 @@ namespace ToDo.Api
 
         // Put api/todo
         [HttpPut]
-        public ActionResult<ToDoContract> UpdateOne([FromBody] ToDoContract ToDo)
+        public ActionResult<ToDoModel> UpdateOne([FromBody] ToDoModel ToDo)
         {
 
             var response = _service.UpdateOne(MapContractToEntity(ToDo));
@@ -64,7 +63,7 @@ namespace ToDo.Api
             return Ok();
         }
 
-        private ToDoEntity MapContractToEntity(ToDoContract contract)
+        private ToDoEntity MapContractToEntity(ToDoModel contract)
         {
             return new ToDoEntity
             {
@@ -75,9 +74,9 @@ namespace ToDo.Api
             };
         }
 
-        private ToDoContract MapEntityToContract(ToDoEntity entity)
+        private ToDoModel MapEntityToContract(ToDoEntity entity)
         {
-            return new ToDoContract
+            return new ToDoModel
             {
                 Id = entity.Id,
                 Title = entity.Title,

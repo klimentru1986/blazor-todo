@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using ToDo.DataLayer.Models;
+using ToDo.DataLayer.Entities;
 
 namespace ToDo.DataLayer
 {

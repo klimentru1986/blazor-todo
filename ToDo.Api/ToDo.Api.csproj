@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../ToDo.Contracts/ToDo.Contracts.csproj"/>
+    <ProjectReference Include="../ToDo.Models/ToDo.Models.csproj"/>
   </ItemGroup>
 
   <ItemGroup>

@@ -2,7 +2,7 @@
 @inject HttpClient Http;
 @inject IUriHelper UriHelper
 @using ToDo.Client.ViewModel;
-@using ToDo.Contracts;
+@using ToDo.Models;
 
 <h1>Add ToDo</h1>
 
@@ -27,14 +27,14 @@
 </EditForm>
 
 @code {
-    public ToDoContract formModel = new ToDoContract();
+    public ToDoModel formModel = new ToDoModel();
 
     public readonly string baseUrl = new BaseUrl().Url;
 
     async void AddToDoItem() 
     {
         formModel.Completed = false;
-        await Http.PostJsonAsync<ToDoContract>(baseUrl + "todo", formModel);
+        await Http.PostJsonAsync<ToDoModel>(baseUrl + "todo", formModel);
         UriHelper.NavigateTo("todo-list");
     }
 }

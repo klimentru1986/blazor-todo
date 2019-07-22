@@ -1,4 +1,4 @@
-namespace ToDo.DataLayer.Models
+namespace ToDo.DataLayer.Entities
 {
     public class ToDoEntity
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ToDo.DataLayer.Models;
+using ToDo.DataLayer.Entities;
 using ToDo.DataLayer.Repository;
 
 namespace ToDo.Api.Services

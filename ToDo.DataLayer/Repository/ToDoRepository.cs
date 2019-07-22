@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ToDo.DataLayer.Models;
+using ToDo.DataLayer.Entities;
 
 namespace ToDo.DataLayer.Repository
 {

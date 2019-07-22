@@ -1,6 +1,6 @@
-namespace ToDo.Contracts
+namespace ToDo.Models
 {
-    public class ToDoContract
+    public class ToDoModel
     {
         public int Id { get; set; }
 
