@@ -15,7 +15,8 @@ namespace ToDo.Api.Services
     public class ToDoService : IToDoService
     {
 
-        private IToDoRepository _repository { get; set; }
+        private readonly IToDoRepository _repository;
+        
         public ToDoService(IToDoRepository repository)
         {
             _repository = repository;

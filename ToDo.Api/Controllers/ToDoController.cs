@@ -15,7 +15,7 @@ namespace ToDo.Api
     public class ToDoController : ControllerBase
     {
 
-        private IToDoService _service { get; set; }
+        private readonly IToDoService _service;
 
         public ToDoController(IToDoService service)
         {

@@ -17,8 +17,8 @@ namespace ToDo.DataLayer.Repository
     }
     public class ToDoRepository : IToDoRepository
     {
-        private DataContext _context { get; }
-        private DbSet<ToDoEntity> _dbSet { get; set; }
+        private readonly DataContext _context;
+        private readonly DbSet<ToDoEntity> _dbSet;
 
         public ToDoRepository(DataContext dbContext)
         {
