@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using ToDo.Api.Services;
 using ToDo.Models;
 using ToDo.DataLayer.Entities;
+using AutoMapper;
 
 namespace ToDo.Api
 {
@@ -16,10 +17,12 @@ namespace ToDo.Api
     {
 
         private readonly IToDoService _service;
+        private readonly IMapper _mapper;
 
-        public ToDoController(IToDoService service)
+        public ToDoController(IToDoService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         // GET api/todo
@@ -30,7 +33,7 @@ namespace ToDo.Api
             var response = await _service.GetAll();
 
             return Ok(response
-                .Select(i => MapEntityToModel(i))
+                .Select(i => _mapper.Map<ToDoEntity, ToDoModel>(i))
                 .ToList());
         }
 
@@ -39,9 +42,9 @@ namespace ToDo.Api
         public async Task<ActionResult<ToDoModel>> AddOne([FromBody] ToDoModel ToDo)
         {
 
-            var response = await _service.AddOne(MapModelToEntity(ToDo));
+            var response = await _service.AddOne(_mapper.Map<ToDoModel, ToDoEntity>(ToDo));
 
-            return Ok(MapEntityToModel(response));
+            return Ok(_mapper.Map<ToDoEntity, ToDoModel>(response));
         }
 
         // Put api/todo
@@ -49,9 +52,9 @@ namespace ToDo.Api
         public ActionResult<ToDoModel> UpdateOne([FromBody] ToDoModel ToDo)
         {
 
-            var response = _service.UpdateOne(MapModelToEntity(ToDo));
+            var response = _service.UpdateOne(_mapper.Map<ToDoModel, ToDoEntity>(ToDo));
 
-            return MapEntityToModel(response);
+            return _mapper.Map<ToDoEntity, ToDoModel>(response);
         }
 
         // Delete api/todo
@@ -61,28 +64,6 @@ namespace ToDo.Api
             _service.DeleteOne(new ToDoEntity { Id = Id });
 
             return Ok();
-        }
-
-        private ToDoEntity MapModelToEntity(ToDoModel contract)
-        {
-            return new ToDoEntity
-            {
-                Id = contract.Id,
-                Title = contract.Title,
-                Description = contract.Description,
-                Completed = contract.Completed
-            };
-        }
-
-        private ToDoModel MapEntityToModel(ToDoEntity entity)
-        {
-            return new ToDoModel
-            {
-                Id = entity.Id,
-                Title = entity.Title,
-                Description = entity.Description,
-                Completed = entity.Completed
-            };
         }
     }
 }

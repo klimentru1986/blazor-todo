@@ -15,6 +15,9 @@ using ToDo.Api.Services;
 using ToDo.DataLayer;
 using ToDo.DataLayer.Repository;
 
+using AutoMapper;
+using ToDo.Api.Mapping;
+
 namespace ToDo.Api
 {
     public class Startup
@@ -30,6 +33,8 @@ namespace ToDo.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddTransient<IToDoRepository, ToDoRepository>();
 
