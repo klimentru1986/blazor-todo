@@ -30,7 +30,7 @@ namespace ToDo.Api
             var response = await _service.GetAll();
 
             return Ok(response
-                .Select(i => MapEntityToContract(i))
+                .Select(i => MapEntityToModel(i))
                 .ToList());
         }
 
@@ -39,9 +39,9 @@ namespace ToDo.Api
         public async Task<ActionResult<ToDoModel>> AddOne([FromBody] ToDoModel ToDo)
         {
 
-            var response = await _service.AddOne(MapContractToEntity(ToDo));
+            var response = await _service.AddOne(MapModelToEntity(ToDo));
 
-            return Ok(MapEntityToContract(response));
+            return Ok(MapEntityToModel(response));
         }
 
         // Put api/todo
@@ -49,9 +49,9 @@ namespace ToDo.Api
         public ActionResult<ToDoModel> UpdateOne([FromBody] ToDoModel ToDo)
         {
 
-            var response = _service.UpdateOne(MapContractToEntity(ToDo));
+            var response = _service.UpdateOne(MapModelToEntity(ToDo));
 
-            return MapEntityToContract(response);
+            return MapEntityToModel(response);
         }
 
         // Delete api/todo
@@ -63,7 +63,7 @@ namespace ToDo.Api
             return Ok();
         }
 
-        private ToDoEntity MapContractToEntity(ToDoModel contract)
+        private ToDoEntity MapModelToEntity(ToDoModel contract)
         {
             return new ToDoEntity
             {
@@ -74,7 +74,7 @@ namespace ToDo.Api
             };
         }
 
-        private ToDoModel MapEntityToContract(ToDoEntity entity)
+        private ToDoModel MapEntityToModel(ToDoEntity entity)
         {
             return new ToDoModel
             {

@@ -5,7 +5,7 @@
 
 <h1>ToDo List</h1>
 
-@if (toDos == null)
+@if (ToDos == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -13,48 +13,38 @@ else
 {
     <table class="table">
         <tbody>
-            @foreach (var toDo in toDos)
+            @foreach (var ToDo in ToDos)
             {
-                <tr>
-                    @if(@toDo?.Completed == true){
-                        <td class="todo-completed">@toDo.Title</td>
-                    }else{
-                        <td>@toDo.Title</td>
-                    }
-
-                    <td @onclick="@(()=>@UpdateToDo(@toDo))" class="icon-column">
-                        <span class="oi oi-check" aria-hidden="true"></span>
-                    </td>
-                    
-                    <td @onclick="@(()=>@DeleteToDo(@toDo.Id))" class="icon-column">
-                        <span class="oi oi-trash" aria-hidden="true"></span>
-                    </td>
-                </tr>
+                <ToDoItem 
+                    ToDo="@ToDo" 
+                    OnCheck="@(()=>@UpdateToDo(@ToDo))"   
+                    OnDelete="@(()=>@DeleteToDo(@ToDo.Id))" 
+                />
             }
         </tbody>
     </table>
 }
 
 @code {
-    IList<ToDoModel> toDos;
+    IList<ToDoModel> ToDos;
 
     public readonly string baseUrl = new BaseUrl().Url;
 
     protected override async Task OnInitAsync()
     {
-        toDos = await Http.GetJsonAsync<IList<ToDoModel>>(baseUrl + "todo");
+        ToDos = await Http.GetJsonAsync<IList<ToDoModel>>(baseUrl + "todo");
     }
 
     async Task DeleteToDo(int Id) 
     {
         await Http.DeleteAsync(baseUrl + "todo?id=" + Id);
         
-        toDos = toDos.Where(i=>i.Id != Id).ToList();
+        ToDos = ToDos.Where(i=>i.Id != Id).ToList();
     }
 
-    async Task UpdateToDo(ToDoModel toDo)
+    async Task UpdateToDo(ToDoModel ToDo)
     {
-        toDo.Completed = !toDo.Completed;
-        await Http.PutJsonAsync(baseUrl + "todo", toDo);
+        ToDo.Completed = !ToDo.Completed;
+        await Http.PutJsonAsync(baseUrl + "todo", ToDo);
     }
 }

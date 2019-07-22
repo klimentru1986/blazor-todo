@@ -1,0 +1,28 @@
+@using ToDo.Models;
+
+<tr>
+    @if(@ToDo?.Completed == true){
+        <td class="todo-completed">@ToDo?.Title</td>
+    }else{
+        <td>@ToDo?.Title</td>
+    }
+
+    <td @onclick="@OnCheck" class="icon-column">
+        <span class="oi oi-check" aria-hidden="true"></span>
+    </td>
+                    
+    <td @onclick="@OnDelete" class="icon-column">
+        <span class="oi oi-trash" aria-hidden="true"></span>
+    </td>
+</tr>
+
+@code{
+    [Parameter]
+    private ToDoModel ToDo { get; set; }
+
+    [Parameter]
+    private EventCallback<UIMouseEventArgs> OnCheck { get; set; }
+
+    [Parameter]
+    private EventCallback<UIMouseEventArgs> OnDelete { get; set; }
+}
