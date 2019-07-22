@@ -31,7 +31,7 @@
 
     public readonly string baseUrl = new BaseUrl().Url;
 
-    async void AddToDoItem() 
+    async Task AddToDoItem() 
     {
         formModel.Completed = false;
         await Http.PostJsonAsync<ToDoModel>(baseUrl + "todo", formModel);

@@ -12,18 +12,23 @@
 else
 {
     <table class="table">
-        <thead>
-            <tr>
-                <th>ToDo</th>
-                <th>completed</th>
-            </tr>
-        </thead>
         <tbody>
             @foreach (var toDo in toDos)
             {
                 <tr>
-                    <td>@toDo.Title</td>
-                    <td>@toDo.Completed</td>
+                    @if(@toDo?.Completed == true){
+                        <td class="todo-completed">@toDo.Title</td>
+                    }else{
+                        <td>@toDo.Title</td>
+                    }
+
+                    <td @onclick="@(()=>@UpdateToDo(@toDo))" class="icon-column">
+                        <span class="oi oi-check" aria-hidden="true"></span>
+                    </td>
+                    
+                    <td @onclick="@(()=>@DeleteToDo(@toDo.Id))" class="icon-column">
+                        <span class="oi oi-trash" aria-hidden="true"></span>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -31,12 +36,25 @@ else
 }
 
 @code {
-    ToDoModel[] toDos;
+    IList<ToDoModel> toDos;
 
     public readonly string baseUrl = new BaseUrl().Url;
 
     protected override async Task OnInitAsync()
     {
-        toDos = await Http.GetJsonAsync<ToDoModel[]>(baseUrl + "todo");
+        toDos = await Http.GetJsonAsync<IList<ToDoModel>>(baseUrl + "todo");
+    }
+
+    async Task DeleteToDo(int Id) 
+    {
+        await Http.DeleteAsync(baseUrl + "todo?id=" + Id);
+        
+        toDos = toDos.Where(i=>i.Id != Id).ToList();
+    }
+
+    async Task UpdateToDo(ToDoModel toDo)
+    {
+        toDo.Completed = !toDo.Completed;
+        await Http.PutJsonAsync(baseUrl + "todo", toDo);
     }
 }
