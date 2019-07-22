@@ -7,6 +7,7 @@
 <h1>Add ToDo</h1>
 
 <EditForm Model="@formModel" OnValidSubmit="@AddToDoItem">
+
   <div class="form-group">
     <label for="toDoTitle">ToDo Title</label>
     <InputText @bind-Value="@formModel.Title"
@@ -23,7 +24,10 @@
         rows="3"></InputTextArea>
   </div>
 
-    <button class="btn btn-primary">Add ToDo</button>
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <button class="btn btn-primary">Add ToDo</button>
 </EditForm>
 
 @code {

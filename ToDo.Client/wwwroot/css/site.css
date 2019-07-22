@@ -99,6 +99,7 @@ app {
 
 .icon-column {
   width: 2rem;
+  cursor: pointer;
 }
 
 .todo-completed {
