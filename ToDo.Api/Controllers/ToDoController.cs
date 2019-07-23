@@ -49,19 +49,19 @@ namespace ToDo.Api
 
         // Put api/todo
         [HttpPut]
-        public ActionResult<ToDoModel> UpdateOne([FromBody] ToDoModel ToDo)
+        public async Task<ActionResult<ToDoModel>> UpdateOne([FromBody] ToDoModel ToDo)
         {
 
-            var response = _service.UpdateOne(_mapper.Map<ToDoModel, ToDoEntity>(ToDo));
+            var response = await _service.UpdateOne(_mapper.Map<ToDoModel, ToDoEntity>(ToDo));
 
-            return _mapper.Map<ToDoEntity, ToDoModel>(response);
+            return Ok(_mapper.Map<ToDoEntity, ToDoModel>(response));
         }
 
         // Delete api/todo
         [HttpDelete]
-        public ActionResult Delete([FromQuery] int Id)
+        public async Task<ActionResult> Delete([FromQuery] int Id)
         {
-            _service.DeleteOne(new ToDoEntity { Id = Id });
+            await _service.DeleteOne(new ToDoEntity { Id = Id });
 
             return Ok();
         }

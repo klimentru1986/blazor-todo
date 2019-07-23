@@ -1,45 +1,50 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using ToDo.DataLayer;
 using ToDo.DataLayer.Entities;
-using ToDo.DataLayer.Repository;
 
 namespace ToDo.Api.Services
 {
-    public interface IToDoService
-    {
-        Task<IList<ToDoEntity>> GetAll();
-        Task<ToDoEntity> AddOne(ToDoEntity ToDo);
-        ToDoEntity UpdateOne(ToDoEntity ToDo);
-        void DeleteOne(ToDoEntity ToDo);
-    }
     public class ToDoService : IToDoService
     {
 
-        private readonly IToDoRepository _repository;
-        
-        public ToDoService(IToDoRepository repository)
+        private readonly DataContext _context;
+        private readonly DbSet<ToDoEntity> _dbSet;
+
+        public ToDoService(DataContext dbContext)
         {
-            _repository = repository;
+            _context = dbContext;
+            _dbSet = _context.ToDoEntity;
         }
 
         public async Task<IList<ToDoEntity>> GetAll()
         {
-            return await _repository.GetAll();
+            return await _dbSet.ToArrayAsync();
         }
 
         public async Task<ToDoEntity> AddOne(ToDoEntity ToDo)
         {
-            return await _repository.AddOne(ToDo);
+            var res = await _dbSet.AddAsync(ToDo);
+
+            await _context.SaveChangesAsync();
+
+            return res.Entity;
         }
 
-        public ToDoEntity UpdateOne(ToDoEntity ToDo)
+        public async Task<ToDoEntity> UpdateOne(ToDoEntity ToDo)
         {
-            return _repository.UpdateOne(ToDo);
+            var res = _dbSet.Update(ToDo);
+
+            await _context.SaveChangesAsync();
+
+            return ToDo;
         }
 
-        public void DeleteOne(ToDoEntity ToDo)
+        public async Task DeleteOne(ToDoEntity ToDo)
         {
-            _repository.DeleteOne(ToDo);
+            _dbSet.Remove(ToDo);
+            await _context.SaveChangesAsync();
         }
     }
 }

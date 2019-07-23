@@ -13,7 +13,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ToDo.Api.Services;
 using ToDo.DataLayer;
-using ToDo.DataLayer.Repository;
 
 using AutoMapper;
 using ToDo.Api.Mapping;
@@ -35,8 +34,6 @@ namespace ToDo.Api
             services.AddControllers();
 
             services.AddAutoMapper(typeof(MappingProfile));
-
-            services.AddTransient<IToDoRepository, ToDoRepository>();
 
             services.AddTransient<IToDoService, ToDoService>();
 
