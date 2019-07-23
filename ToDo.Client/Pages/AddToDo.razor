@@ -1,7 +1,7 @@
 ﻿@page "/add-todo"
 @inject HttpClient Http;
-@inject IUriHelper UriHelper
-@using ToDo.Client.ViewModel;
+@inject IUriHelper UriHelper;
+@inject Configuration.IConfiguration Configuration;
 @using ToDo.Models;
 
 <h1>Add ToDo</h1>
@@ -33,12 +33,10 @@
 @code {
     public ToDoModel formModel = new ToDoModel();
 
-    public readonly string baseUrl = new BaseUrl().Url;
-
     async Task AddToDoItem() 
     {
         formModel.Completed = false;
-        await Http.PostJsonAsync<ToDoModel>(baseUrl + "todo", formModel);
+        await Http.PostJsonAsync<ToDoModel>(Configuration.apiUrl + "todo", formModel);
         UriHelper.NavigateTo("todo-list");
     }
 }

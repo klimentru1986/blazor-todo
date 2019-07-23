@@ -1,6 +1,6 @@
 @page "/todo-list"
 @inject HttpClient Http;
-@using ToDo.Client.ViewModel;
+@inject Configuration.IConfiguration Configuration;
 @using ToDo.Models;
 
 <h1>ToDo List</h1>
@@ -28,16 +28,14 @@ else
 @code {
     IList<ToDoModel> ToDos;
 
-    public readonly string baseUrl = new BaseUrl().Url;
-
     protected override async Task OnInitAsync()
     {
-        ToDos = await Http.GetJsonAsync<IList<ToDoModel>>(baseUrl + "todo");
+        ToDos = await Http.GetJsonAsync<IList<ToDoModel>>(Configuration.apiUrl + "todo");
     }
 
     async Task DeleteToDo(int Id) 
     {
-        await Http.DeleteAsync(baseUrl + "todo?id=" + Id);
+        await Http.DeleteAsync(Configuration.apiUrl + "todo?id=" + Id);
         
         ToDos = ToDos.Where(i=>i.Id != Id).ToList();
     }
@@ -45,6 +43,6 @@ else
     async Task UpdateToDo(ToDoModel ToDo)
     {
         ToDo.Completed = !ToDo.Completed;
-        await Http.PutJsonAsync(baseUrl + "todo", ToDo);
+        await Http.PutJsonAsync(Configuration.apiUrl + "todo", ToDo);
     }
 }
