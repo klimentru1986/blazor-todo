@@ -1,10 +1,5 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-preview6 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-preview6 AS api
 WORKDIR /app
 COPY . ./
 
-RUN dotnet build -c Release
-
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-preview6 AS api
-WORKDIR /app
-COPY --from=build /app/ToDo.Api/out .
-ENTRYPOINT ["dotnet", "ToDo.Api.dll", "--urls", "http://+:5001"]
+CMD dotnet run -c Release --urls="http://+:5001" --project ToDo.Api ./ToDo.Api/    
