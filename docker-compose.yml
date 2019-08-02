@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./ToDo.Api/Dockerfile
+    ports:
+      - '5001:5001'
+
+  client:
+    build:
+      context: .
+      dockerfile: ./ToDo.Client/Dockerfile
+    ports:
+      - '8000:80'

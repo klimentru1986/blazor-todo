@@ -16,6 +16,7 @@ bin/
 obj/
 tmp/
 temp/
+out/
 $RECYCLE.BIN/
 
 .DS_Store
